@@ -1,0 +1,148 @@
+%% beamerthemeUAntwerp.sty
+%% Copyright 2019 Joren Vanherck
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Joren Vanherck.
+%
+% This work consists of the files 
+% 	beamerthemeUAntwerp.sty, 
+% 	beamercolorthemeUAntwerp.sty, 
+% 	beamerfontthemeUAntwerp.sty, 
+% 	beamerinnerthemeUAntwerp.sty, 
+% 	beamerouterthemeUAntwerp.sty,
+% 	colorsUAntwerp.sty,
+% and the example file UAntwerp_beamer_example.tex.
+%
+% <<<======================================================================
+% Beamer template as alternative for UAntwerp powerpoint template.
+% Because most projectors are 16x9 these days, I chose to optimize the
+% template for this situation. However, it also works fine in 4x3.
+%
+% Frame size (4x3): 128mm by 96mm, (16x9): 160mm by 90mm
+% Original ppt template size: 254mm by 190.5mm (4x3)
+% ======================================================================>>>
+\mode<presentation>
+
+% Load packages that are used by the template
+\RequirePackage{ifluatex}
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+\RequirePackage{calc}
+\RequirePackage[export]{adjustbox} % additional alignment options for figures
+\RequirePackage{relsize}
+\RequirePackage{environ}
+
+\usetikzlibrary{calc, through}
+% Avoid double definitions with pgfmathsetmacro. Use \pgfmathsetnewmacro
+% https://tex.stackexchange.com/questions/47178/what-is-the-preferred-way-of-defining-a-tikz-constant
+\newcommand*{\pgfmathsetnewmacro}[2]{%
+    \newcommand*{#1}{}% Error if already defined
+    \pgfmathsetmacro{#1}{#2}%
+}%
+
+% Command to easily define new lengths
+\newcommand*{\defnewlength}[2]{%
+    \newlength{#1}%
+    \setlength{#1}{#2}%
+}%
+
+% Cammand to define a additional custom logo.
+% The argument should be the path to the logo.
+% You possibly need to define the directories that contain you images by
+% \graphicspath{{/}{dir1/}{even/more/directories/}}
+\newcommand*{\mylogo}[1]{%
+	\def\beamer@UAntwerp@mylogo{#1}
+}%
+
+% We sometimes want to scale things correctly by their width or height. For this, we define the following scaling factors
+\defnewlength{\pptheight}{190.5mm} % slide height in ppt template
+\defnewlength{\pptwidth}{254mm} % slide width in ppt template
+\newcommand{\absbeamerpptwidthscale}{1*\ratio{128mm}{\pptwidth}} % absolute scale factor cm in ppt
+\newcommand{\beamerpptwidthscale}{1*\ratio{\beamer@paperwidth}{\pptwidth}} % relative scale factor for widths
+\newcommand{\beamerpptheightscale}{1*\ratio{\beamer@paperheight}{\pptheight}} % relative scale factor for heights
+\defnewlength{\pptwcm}{1cm * \beamerpptwidthscale} % 1cm width relatively scaled from ppt
+\defnewlength{\ppthcm}{1cm * \beamerpptheightscale} % 1cm relatively height scaled from ppt
+\defnewlength{\abspptcm}{1cm * \absbeamerpptwidthscale} % 1cm in any direction from ppt
+
+
+% <<<======================================================================
+% Option handling for the theme
+% First all the options are defined. 
+% After this is done, the options are processed.
+
+% <<<----------------------------------------------------------------------
+% The font option 'ligatures' is passed to the font theme,
+% where the presence of ligatures in the font is determined
+\DeclareOptionBeamer{ligatures}{
+    \PassOptionsToPackage{ligatures=#1}{beamerfontthemeUAntwerp}
+}
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% The 'beginsection' option speciefies whether something special should be
+% added automatically  at the beginning of each section. You can either shoose a 
+% 'sectiondivider' which states the section title, a Table of Contents 'toc'
+% which shows an overview of the presentation, or nothing special at all. 
+% 'nothing' is default.
+\DeclareOptionBeamer{beginsection}{\def\beamer@UAntwerp@beginsection{#1}}
+\def\beamer@UAntwerp@beginsection@sectiondivider{sectiondivider}%
+\def\beamer@UAntwerp@beginsection@toc{toc}%
+\def\beamer@UAntwerp@beginsection@nothing{nothing}%
+% ---------------------------------------------------------------------->>>
+
+\ExecuteOptionsBeamer%
+{%
+	ligatures=no,%
+	beginsection=nothing %
+} % default option list
+\ProcessOptionsBeamer
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Settings, handled by the color, font, outer and inner themes
+\usecolortheme{UAntwerp}
+\usefonttheme{UAntwerp}
+\useoutertheme{UAntwerp}
+\useinnertheme{UAntwerp}
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Automatically add something at the beginning of a new section?
+\ifx\beamer@UAntwerp@beginsection\beamer@UAntwerp@beginsection@sectiondivider % a sectiondivider
+	\AtBeginSection[]
+	{
+		\usebeamertemplate{sectiondivider}
+	}	
+\else% 
+	\ifx\beamer@UAntwerp@beginsection\beamer@UAntwerp@beginsection@toc % a ToC
+		\AtBeginSection[]
+		{
+			\begin{frame}
+				\frametitle{Table of Contents}
+				\tableofcontents[currentsection]
+			\end{frame}
+		}
+	\else % nothing at all
+	\fi%
+\fi%
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Automatically add title and endslides
+\AtBeginDocument{\usebeamertemplate{titlepagewithfootline}} % Automagically add title slide
+%\AtEndDocument{\usebeamertemplate{endpage}} % Final slide will be special endpage slide
+% ======================================================================>>>
+
+\mode<all>

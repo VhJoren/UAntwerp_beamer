@@ -1,0 +1,343 @@
+%% beamerinnerthemeUAntwerp.sty
+%% Copyright 2019 Joren Vanherck
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Joren Vanherck.
+%
+% This work consists of the files 
+% 	beamerthemeUAntwerp.sty, 
+% 	beamercolorthemeUAntwerp.sty, 
+% 	beamerfontthemeUAntwerp.sty, 
+% 	beamerinnerthemeUAntwerp.sty, 
+% 	beamerouterthemeUAntwerp.sty,
+% 	colorsUAntwerp.sty,
+% and the example file UAntwerp_beamer_example.tex.
+%
+% <<<======================================================================
+% Inner theme for the beamer UAntwerp template
+% ======================================================================>>>
+\mode<presentation>
+
+
+% <<<======================================================================
+% Customizations of the title page
+
+% The left margin is given the same absolute width as in the ppt template.
+% The vertical position of the title is measured from the bottom of the slide to the bottom of the title and scaled proportional to the width of the slide, in such a way that the vertical positions are identical to the ppt slide for 4:3 aspect ratio.
+% The poroportional scaling with the width of the slide was chosen because the bottom wave also scales proportionally to the width of the slide (both in horizontal and vertical direction).
+% This means that the distance from the figure remains the same.
+% The subtitle and authors are placed at the same absolute vertical distance from the title as in the ppt template.
+\defbeamertemplate*{title page}{UAntwerp}[1][]
+{
+	\begin{tikzpicture}[remember picture,overlay, x=1.0\pptwcm, y=1.0\ppthcm]
+		% A path that follows the edges of the current page
+		\tikzstyle{reverseclip}=[insert path={(current page.north east) --
+			(current page.south east) --
+			(current page.south west) --
+			(current page.north west) --
+			(current page.north east)}
+		]
+	
+		% Define some lengths
+		\pgfmathsetnewmacro{\hmargintitle}{1.7} % ppt distance title left from left slide edge = 1.7cm
+		\pgfmathsetnewmacro{\vmargintitle}{9.82} % ppt distance title bottom from bottom slide edge = 19.05cm-(3.33cm + 6.0cm - 0.1cm) = 9.82 cm
+		\pgfmathsetnewmacro{\widthtitle}{22.0} % ppt title width = 22.4 cm - 0.4 cm = 22cm
+		\pgfmathsetnewmacro{\vmarginsubtitle}{8.82} % ppt distance subtitle top from bottom slide edge = 19.05cm - (10.13cm + 0.1cm) = 8.82 cm
+		\pgfmathsetnewmacro{\vmarginauthor}{5.82} % No author in original template. Choose to be below subtitle.
+		\pgfmathsetnewmacro{\vdisttitlesubtitle}{\vmargintitle-\vmarginsubtitle}
+		\pgfmathsetnewmacro{\vdisttitleauthor}{\vmargintitle-\vmarginauthor}
+		
+		% Bottom Wave title page
+		%TODO: make adaptations for the different groups
+		%TODO: make Dutch version
+		%% Points on red arc and center of circle for this arc
+		\coordinate (lpred) at ($(current page.south west) + (0,3.28\pptwcm)$);
+		\coordinate (rpred) at ($(current page.south east) + (0,4.39\pptwcm)$);
+		\coordinate (midred) at ($ (lpred)!0.5!(rpred) $);
+		\coordinate (cred) at ($ (midred)!5.9!90:(rpred) $);
+		
+		%% Points on blue arc and center of circle for this arc
+		\coordinate (lpblue) at ($(current page.south west) + (0,2.65\pptwcm)$);
+		\coordinate (rpblue) at ($(current page.south east) + (0,4.60\pptwcm)$);
+		\coordinate (midblue) at ($ (lpblue)!0.5!(rpblue) $);
+		\coordinate (cblue) at ($ (midblue)!5.9!90:(rpblue) $);
+				
+		%% Draw the arc at the botoom of the tile page
+		\begin{scope}
+			\path[reverseclip, fill=uared] 
+				let 
+					\p1 = ($ (cred) - (lpred) $), 
+					\n1 = {veclen(\x1,\y1)} 
+				in
+					(cred) circle (\n1);
+			\path[reverseclip, fill=uablue] 
+				let 
+					\p1 = ($ (cblue) - (lpblue) $), 
+					\n1 = {veclen(\x1,\y1)} 
+				in
+					(cblue) circle (\n1);
+		\end{scope}
+
+		% Text logo UA
+		\node[
+			anchor=south east, 
+			inner sep=0,
+			outer sep=0,
+			] 
+		(UA_logo_text) 
+		at ($(current page.south east) + (-1.23\pptwcm,1\pptwcm)$)
+		{
+			% Logo UA: width = 5\pptwcm, height = 1.45\pptwcm
+			\includegraphics[max height=1.45\pptwcm]{logo/UA_HOR_ENG_WIT.png}			 
+		};
+					
+		% optional additional logo
+		\@ifundefined{beamer@UAntwerp@mylogo}
+		{} % Generate nothing if no additional logo is defined
+		{%
+			\node[
+				anchor=south east, 
+				inner sep=0,
+				outer sep=0,
+				] 
+			(opt_logo) 
+			at ($(current page.south east) + (-7.15\pptwcm,1\pptwcm)$)
+			{
+				% Logo UA: width = 5\pptwcm, height = 1.45\pptwcm
+				\includegraphics[max height=1.45\pptwcm]{\beamer@UAntwerp@mylogo}			 
+			};
+		}%
+		
+		% title
+		\node[
+			align=flush left, 
+			text width = \widthtitle\pptwcm, 
+			anchor=south west, 
+			shift={(\hmargintitle\abspptcm,\vmargintitle\pptwcm)}, 
+		]
+		(title)
+		at (current page.south west) 
+		{
+			\usebeamercolor[fg]{title} \usebeamerfont{title}{\inserttitle}
+		};
+		
+		% subtitle
+		\node[
+			align=flush left, 
+			text width = \widthtitle\pptwcm, 
+			anchor=north west, 
+			shift={(0,-\vdisttitlesubtitle\abspptcm)},
+		] 
+		at (title.south west) 
+		{ 
+			\usebeamercolor[fg]{subtitle} \usebeamerfont{subtitle}{\insertsubtitle}
+		};
+		
+		% authors
+		\node[
+			align=flush left, 
+			text width = \widthtitle\pptwcm, 
+			anchor=north west,
+			shift={(0,-\vdisttitleauthor\abspptcm)},
+		] 
+		at (title.south west) 
+		{ 
+			\usebeamercolor[fg]{author} \usebeamerfont{author}{\insertauthor}
+		};
+		
+	\end{tikzpicture}
+} % End of titlepage UAntwerp
+
+% <<<----------------------------------------------------------------------
+% Complete finalized title page frame, including correct footline.
+\setbeamertemplate{titlepagewithfootline}{%
+	{
+		\setbeamertemplate{footline}[titleslide] %locally we need a different footline
+		\begin{frame}[noframenumbering] % Do not count for number of frames
+			\titlepage
+		\end{frame}
+	}
+} % End of titlepage frame with footline UAntwerp
+% ---------------------------------------------------------------------->>>
+% ======================================================================>>>
+
+% <<<======================================================================
+% Customizations of a Colour divider
+% The standard centering environment uses a '\beamer@frametopskip' (normally 1\fill) 
+% at the top and a '\beamer@framebottomskip' (normally 1.5\fill) at the bottom.
+% To counteract this misalignment, we add these lengths at the opposite sides.
+% Because the body of the environment needs to be modified as a whole,
+% we used the '\NewEnviron' command from the 'environ' package.
+\NewEnviron{colourdivider}
+{%
+	{
+	\setbeamertemplate{background canvas}
+	{
+		\begin{tikzpicture}
+			\shade[shading = axis, left color=uablue,right color=ualightblue, shading angle=45](0,0) rectangle (\paperwidth,\paperheight);
+		\end{tikzpicture}
+	}
+	\setbeamertemplate{footline}{emptyfooter}
+	\begin{frame}[plain, c]{ }
+	\vspace{\beamer@framebottomskip}
+		\begin{beamercolorbox}[center]{colourdivider}
+			\usebeamerfont{colourdivider}
+			{\BODY}
+		\end{beamercolorbox}
+	\vspace{\beamer@frametopskip}
+	\end{frame}
+	}
+} % End colourdivider environment
+
+% Customizations of a section divider
+\setbeamertemplate{sectiondivider}
+{%
+	{
+	\setbeamertemplate{footline}[normal slide]
+	\begin{frame}
+		\begin{tikzpicture}[remember picture,overlay, x=1.0\pptwcm, y=1.0\ppthcm]
+			% Define some lengths
+			\pgfmathsetnewmacro{\hmargintitle}{1.7} % ppt distance title left from left slide edge = 1.7cm
+			\pgfmathsetnewmacro{\vmargintitle}{9.82} % ppt distance title bottom from bottom slide edge = 19.05cm-(3.33cm + 6.0cm - 0.1cm) = 9.82 cm
+			\pgfmathsetnewmacro{\widthtitle}{22.0} % ppt title width = 22.4 cm - 0.4 cm = 22cm
+			
+			% Sectiontitle
+			\node[
+				align=flush left, 
+				text width = \widthtitle\pptwcm, 
+				anchor=south west, 
+				shift={(\hmargintitle\abspptcm,\vmargintitle\ppthcm)}, 
+			]
+			(sectiontitle)
+			at (current page.south west) 
+			{
+				\usebeamercolor[fg]{title} \usebeamerfont{title}{\secname}
+			};
+			
+			% chapter/section number
+			\node[
+				align=flush left, 
+				text width = \widthtitle\pptwcm, 
+				anchor=south west, 
+				shift={(0,4.6\abspptcm)},
+			] 
+			at (sectiontitle.south west) 
+			{ 
+				\usebeamercolor[fg]{subtitle} \usebeamerfont{subtitle}{Chapter \thesection}
+			};
+		\end{tikzpicture}
+	\end{frame}
+	}
+} % End sectiondivider environment
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Itemize/list cusomizations
+
+% <<<----------------------------------------------------------------------
+% Define itemize items, smallsquare
+% Choose the side length of the small itemize squares
+\newcommand{\smallsquareside}{0.6ex}
+\defbeamertemplate*{itemize items}{smallsquare}{\raisebox{0.2ex}{\hbox{\vrule width \smallsquareside height \smallsquareside}}}
+\defbeamertemplate*{itemize item}{smallsquare}{\raisebox{0.2ex}{\hbox{\vrule width \smallsquareside height \smallsquareside}}}
+\defbeamertemplate*{itemize subitem}{smallsquare}{\raisebox{0.2ex}{\hbox{\vrule width \smallsquareside height \smallsquareside}}}
+\defbeamertemplate*{itemize subsubitem}{smallsquare}{\raisebox{0.2ex}{\hbox{\vrule width \smallsquareside height\smallsquareside}}}
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Set the itemize symbols to smallsquares, as defined above
+\setbeamertemplate{itemize items}[smallsquare]
+\setbeamertemplate{itemize item}[smallsquare]
+\setbeamertemplate{itemize subitem}[smallsquare]
+\setbeamertemplate{itemize subsubitem}[smallsquare]
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Define enumerate items, singlenumber
+% Show only the current level counter, and scale with 65% relative to item text
+\defbeamertemplate*{enumerate item}{singlenumber}{\textscale{0.65}{\arabic{enumi}.}}
+\defbeamertemplate*{enumerate subitem}{singlenumber}{\textscale{0.65}{\arabic{enumi}.}}
+\defbeamertemplate*{enumerate subsubitem}{singlenumber}{\textscale{0.65}{\arabic{enumiii}.}}
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Set the enumerate items to singlenumber, as defined above
+\setbeamertemplate{enumerate item}[singlenumber]
+\setbeamertemplate{enumerate subitem}[singlenumber]
+\setbeamertemplate{enumerate subsubitem}[singlenumber]
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Change several distances in lists
+
+% Choose here the distance between the list item and the text
+\newlength{\listseplabeltext}
+\setlength{\listseplabeltext}{0.9ex}
+
+% We can redefine many lengths in the different list types.
+% Some can be changed rather directly using the following templates.
+% Others need to hack '\beamer@cramped', because otherwise they get overwritten.
+% If the '\beamer@cramped' is used, please keep the begin and end parts of the template
+% Beamer starts itemize and enumerate environments as:
+%	\usebeamertemplate{itemize/enumerate body begin}
+%	\list{redacted}{redacted}
+%	\beamer@cramped
+%	\raggedright
+%	\beamer@firstlineitemizeunskip
+% where the macro '\beamer@cramped' is either empty or \itemsep0pt\topsep0.5pt\relax
+% For more information: https://tex.stackexchange.com/a/412275/165534
+% Vertical length scales: \parskip, \topsep, \parsep, \itemsep, \partopsep
+% Horizontal length scales: \leftmargin, \rightmargin, \labelwidth, \labelsep, \listparindent, \itemindent
+\defbeamertemplate*{itemize/enumerate body begin}{UAntwerp}
+{
+	\setlength\leftmargini{\leftslidemargin\abspptcm-\labelsep+\listseplabeltext} % See comment for \labelsep
+	\setlength\labelsep{\listseplabeltext} %distance between label and left aligned itemize text. This setting enforces this distance by shoving the label left rather than moving the body left margin right. If you set this you might need to add a corresponding amount to \leftmargin, if you want your labels in a specific place.
+    %\let\this@beamer@cramped\beamer@cramped
+    %\renewcommand{\beamer@cramped}{
+    %    \this@beamer@cramped
+    %    \addtolength{\itemsep}{.5\baselineskip}
+    %}
+}
+
+\defbeamertemplate*{itemize/enumerate body end}{UAntwerp}
+{
+%    \let\beamer@cramped\this@beamer@cramped
+}
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Set indent of description environment
+\setbeamersize{description width=0.25cm}
+\defbeamertemplate{description item}{align left}{
+	\smash{{\parbox[t]{\textwidth}{\insertdescriptionitem\hfill\\}}}
+	\vphantom{\insertdescriptionitem}
+	}
+\setbeamertemplate{description item}[align left]
+% ---------------------------------------------------------------------->>>
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% table of content settings
+\setbeamertemplate{sections/subsections in toc}[default]
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% block settings
+%TODO
+\setbeamertemplate{blocks}[rounded] % Define block aspects
+% ======================================================================>>>
+
+
+\mode<all>

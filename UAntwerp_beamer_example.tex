@@ -1,0 +1,140 @@
+%% UAntwerp_beamer_example.tex
+%% Copyright 2019 Joren Vanherck
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Joren Vanherck.
+%
+% This work consists of the files 
+% 	beamerthemeUAntwerp.sty, 
+% 	beamercolorthemeUAntwerp.sty, 
+% 	beamerfontthemeUAntwerp.sty, 
+% 	beamerinnerthemeUAntwerp.sty, 
+% 	beamerouterthemeUAntwerp.sty,
+% 	colorsUAntwerp.sty,
+% and the example file UAntwerp_beamer_example.tex.
+%
+\documentclass[
+	t, % needed for top alignment of frame content
+	aspectratio=43, % either 169 for 16:9 or 43 for 4:3
+	12pt % For sizes smaller than 10pt or larger than 14pt: load package 'extsize'
+]{beamer}
+
+\usetheme[%
+	ligatures=no, % options: yes (y), no (n) (default = no). This enables of disables font ligatures.
+	beginsection=sectiondivider % options: sectiondivider, toc, nothing (default = nothing). Option to add an automatically generated slide at the beginning of a new section:
+]{UAntwerp}
+
+% You can load additional packages here. Apart from the packages loaded automatically by beamer, also the following packages are already loaded: ifluatex, tikz, graphicx, calc, adjustbox (with export option), relsize, environ.
+% Loaded when compiled with LuaLaTeX: fontspec, polyglossia
+% Loaded when compiled with pdfLaTeX: inputenc (utf8), lmodern, professionalfonts, babel
+% Loaded TikZ libraries: calc, through
+% Microtype package can be enabled by uncommenting the corresponding lines in beamerfontthemeUAntwerp.sty
+\usepackage{stackengine} % needed in this example to stack coloured boxes
+
+% Some commands to show possible colors in this example template
+\newlength{\colorexampleside}
+\setlength{\colorexampleside}{22.5mm}
+\newlength{\subcolorexampleside}
+\setlength{\subcolorexampleside}{3.75mm}
+\newcommand{\roundboxcolor}[1]{\begin{tikzpicture}\fill[color={#1}, rounded corners=0.2\colorexampleside](0,0) rectangle (\colorexampleside,\colorexampleside); \node[rotate=45] at (0.5\colorexampleside,0.5\colorexampleside) {\small \textcolor{white}{#1}}; \end{tikzpicture}}
+\newcommand{\subroundboxcolor}[2]{\begin{tikzpicture}\fill[color={#1#2}, rounded corners=0.2\subcolorexampleside](0,0) rectangle (\subcolorexampleside,\subcolorexampleside); \node at (0.5\subcolorexampleside,0.5\subcolorexampleside) {\Tiny \textcolor{black}{#2}}; \end{tikzpicture}}
+
+\title{Presentation Sample (title)}
+\subtitle{To inspire you (subtitle)} % Comment out if not needed.
+\author{You can add your name/function here}
+\mylogo{example-image-a} %define here the path to an additional logo you want to add. Comment out if you do not want an additional logo. The logo size is limited to have the same height as the UA logo.
+
+\begin{document}
+
+% Titlepage is automatically taken care of
+
+\begin{frame}
+	\frametitle{Sample `title and text'}
+	Text slide: 1\textsuperscript{st} level has no bullet points. This is normal text on a beamer frame.
+	\begin{itemize}
+		\item 2\textsuperscript{nd} level is same as first, but with bullets. More lines have the same indent. This is the first itemize level.
+		\item Nest \alert{`itemize environments'} for getting the indent you wish.
+		\begin{itemize}
+			\item 3\textsuperscript{th} level gets extra indent and smaller font size.			
+			\begin{itemize}
+				\item The same for 4\textsuperscript{th} level. You really should not go deeper. % Three levels are sufficient
+			\end{itemize}
+		\end{itemize}
+		\item Use the \alert{theme colors} to highlight text.
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{This is the bulleted slide. Keep the title short}
+	\framesubtitle{You can add a subtitle if you want.} %If not: comment out or remove this line
+	\begin{itemize}
+		\item This is the bulleted level 1 
+		\begin{itemize}
+			\item and the second
+			\begin{itemize}
+				\item and third % Three levels are sufficient
+			\end{itemize}
+		\end{itemize}
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{This is the numbered slide. Keep the title short}
+	\framesubtitle{You can add a subtitle if you want.} %If not: comment out or remove this line
+	\begin{enumerate}
+		\item This is numbered level one
+		\begin{enumerate}
+			\item and the second
+			\begin{enumerate}
+				\item and third % Three levels are sufficient
+			\end{enumerate}
+		\end{enumerate}
+	\end{enumerate}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{And one with a title only}
+	\framesubtitle{You can use this one for imagery, tables, etc...}
+	Secret: Actually it doesn't matter. You add to a frame whatever you like in \LaTeX
+\end{frame}
+
+\begin{colourdivider}
+	And this is a coloured divider. Use it as an introduction for a chapter. Or a quote. Or anything that will add value to your presentation
+\end{colourdivider}
+
+\section{This is a section title with `sectiondivider' option}
+
+\begin{frame}
+\frametitle{colours}
+\framesubtitle{These are the defined corporate colours and their names}
+
+
+\setstackgap{S}{0pt}
+\begin{tabular}{l l l l}
+	\roundboxcolor{uablue}\hspace{-0.05cm}\Shortstack{{\subroundboxcolor{uablue}{100}} {\subroundboxcolor{uablue}{75}} {\subroundboxcolor{uablue}{50}} {\subroundboxcolor{uablue}{25}} {\subroundboxcolor{uablue}{10}} {\subroundboxcolor{uablue}{5}}} 
+& 
+	\roundboxcolor{uared}\hspace{-0.05cm}\Shortstack{{\subroundboxcolor{uared}{100}} {\subroundboxcolor{uared}{75}} {\subroundboxcolor{uared}{50}} {\subroundboxcolor{uared}{25}} {\subroundboxcolor{uared}{10}} {\subroundboxcolor{uared}{5}}}
+&
+	\roundboxcolor{lightgrey} 
+& 
+	\roundboxcolor{darkgrey} 
+\\ 
+	\roundboxcolor{ualightblue}\hspace{-0.05cm}\Shortstack{{\subroundboxcolor{ualightblue}{100}} {\subroundboxcolor{ualightblue}{75}} {\subroundboxcolor{ualightblue}{50}} {\subroundboxcolor{ualightblue}{25}} {\subroundboxcolor{ualightblue}{10}} {\subroundboxcolor{ualightblue}{5}}} 
+& 
+	\roundboxcolor{uagold}\hspace{-0.05cm}\Shortstack{{\subroundboxcolor{uagold}{100}} {\subroundboxcolor{uagold}{75}} {\subroundboxcolor{uagold}{50}} {\subroundboxcolor{uagold}{25}} {\subroundboxcolor{uagold}{10}} {\subroundboxcolor{uagold}{5}}} 
+& 
+	\roundboxcolor{uayellow}\hspace{-0.05cm}\Shortstack{{\subroundboxcolor{uayellow}{100}} {\subroundboxcolor{uayellow}{75}} {\subroundboxcolor{uayellow}{50}} {\subroundboxcolor{uayellow}{25}} {\subroundboxcolor{uayellow}{10}} {\subroundboxcolor{uayellow}{5}}}
+&
+\end{tabular}
+\end{frame}
+
+\end{document}

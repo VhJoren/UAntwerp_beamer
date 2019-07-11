@@ -1,0 +1,164 @@
+%% beamerfontthemeUAntwerp.sty
+%% Copyright 2019 Joren Vanherck
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Joren Vanherck.
+%
+% This work consists of the files 
+% 	beamerthemeUAntwerp.sty, 
+% 	beamercolorthemeUAntwerp.sty, 
+% 	beamerfontthemeUAntwerp.sty, 
+% 	beamerinnerthemeUAntwerp.sty, 
+% 	beamerouterthemeUAntwerp.sty,
+% 	colorsUAntwerp.sty,
+% and the example file UAntwerp_beamer_example.tex.
+%
+% <<<======================================================================
+% Font theme for the beamer UAntwerp template
+% ======================================================================>>>
+\mode<presentation>
+
+% <<<======================================================================
+% Process theme options that are passed from the main theme
+
+% <<<----------------------------------------------------------------------
+% The option 'ligatures' specifies whether font ligatures are enabled or
+% disabled. To get the closest match with the official ppt, the ligatures
+% should be disabled. The options are 'yes'/'y' or 'no'/'n' and 'no' is default.
+\DeclareOptionBeamer{ligatures}{\def\beamer@UAntwerp@ligatures{#1}}
+\ExecuteOptionsBeamer{ligatures=no} % default no ligatures
+\ProcessOptionsBeamer
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% ligatures option that are possible
+\def\beamer@UAntwerp@ligatures@yes{yes}%
+\def\beamer@UAntwerp@ligatures@y{y}%
+\def\beamer@UAntwerp@ligatures@no{no}%
+\def\beamer@UAntwerp@ligatures@n{n}%
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Compares passed optoion with possible options. Based on the recognized
+% option, a macro is defined, which is used to control the ligatures
+% where the font is defined
+\def\beamer@UAntwerp@ligaturesoff{off}
+\ifx\beamer@UAntwerp@ligatures\beamer@UAntwerp@ligatures@yes%
+	\def\beamer@UAntwerp@ligaturescontrol{on}%
+\fi
+\ifx\beamer@UAntwerp@ligatures\beamer@UAntwerp@ligatures@y%
+	\def\beamer@UAntwerp@ligaturescontrol{on}%
+\fi
+\ifx\beamer@UAntwerp@ligatures\beamer@UAntwerp@ligatures@no%
+	\def\beamer@UAntwerp@ligaturescontrol{off}%
+\fi
+\ifx\beamer@UAntwerp@ligatures\beamer@UAntwerp@ligatures@n%
+	\def\beamer@UAntwerp@ligaturescontrol{off}%
+\fi
+% ---------------------------------------------------------------------->>>
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% According to the brand book, the font 'Auto` from 'Underware` is the
+% official font for printed content. For Office applications, like
+% presentations, Calibri is the official font.
+% Since Calibri is a .ttf font, it can not be used with pdfLaTeX. In order
+% to get the correct font, the presentation thus needs to be compiled using
+% LuaLaTeX (or XeLaTeX, but this is not implemented yet). Notice that the
+% font looks different from its appearance in MS office applications.
+% This is because LaTeX applies ligatures between letters correctly,
+% whereas MS office applications do not (by default).
+% We turned these ligatures here off as well (by default).
+\ifluatex
+	\RequirePackage{fontspec}
+	\ifx\beamer@UAntwerp@ligaturescontrol\beamer@UAntwerp@ligaturesoff%
+		\defaultfontfeatures{%
+			Ligatures={%
+				NoCommon, %
+				%NoRequired, %
+				%NoContextual, %
+				%NoHistoric, %
+				NoDiscretionary %
+				}
+			}%
+	\fi%
+	\setmainfont{Calibri}
+	\setsansfont{Calibri}
+	\RequirePackage{polyglossia}
+		\setdefaultlanguage{english}
+		\setotherlanguage{dutch}
+%	\RequirePackage{microtype} % better typesetting for luatex
+\else
+	\RequirePackage[utf8]{inputenc} % Use some fine input text encoding
+	\RequirePackage{lmodern} % Remove restriction on font sizes
+	\usefonttheme{professionalfonts} % Make sure beamer does not change the font for mathematical expressions if it thinks a certain glyph is not available
+	\RequirePackage[english]{babel}
+%	\RequirePackage[babel]{microtype} % better typesetting for pdftex
+\fi
+
+% <<<----------------------------------------------------------------------
+% Avoid many error messages with microtype version <2.7
+% see https://tex.stackexchange.com/questions/373594/microtype-producing-dozens-of-unknown-slot-number-warnings
+\makeatletter
+\def\MT@is@composite#1#2\relax{%
+  \ifx\\#2\\\else
+    \expandafter\def\expandafter\MT@char\expandafter{\csname\expandafter
+                    \string\csname\MT@encoding\endcsname
+                    \MT@detokenize@n{#1}-\MT@detokenize@n{#2}\endcsname}%
+    % 3 lines added:
+    \ifx\UnicodeEncodingName\@undefined\else
+      \expandafter\expandafter\expandafter\MT@is@uni@comp\MT@char\iffontchar\else\fi\relax
+    \fi
+    \expandafter\expandafter\expandafter\MT@is@letter\MT@char\relax\relax
+    \ifnum\MT@char@ < \z@
+      \ifMT@xunicode
+        \edef\MT@char{\MT@exp@two@c\MT@strip@prefix\meaning\MT@char>\relax}%
+          \expandafter\MT@exp@two@c\expandafter\MT@is@charx\expandafter
+            \MT@char\MT@charxstring\relax\relax\relax\relax\relax
+      \fi
+    \fi
+  \fi
+}
+% new:
+\def\MT@is@uni@comp#1\iffontchar#2\else#3\fi\relax{%
+  \ifx\\#2\\\else\edef\MT@char{\iffontchar#2\fi}\fi
+}
+\makeatother
+% ---------------------------------------------------------------------->>>
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Define fonts of several different types of text elements
+\setbeamerfont{title}{size=\Large, series=\bfseries} % Presentation title size.
+\setbeamerfont{subtitle}{size=\large, series=\mdseries} % Presentation subtitle size.
+\setbeamerfont{author}{size=\normalsize, series=\mdseries} % Author size.
+\setbeamerfont{frametitle}{size=\Large, series=\mdseries} % Frame title size.
+\setbeamerfont{framesubtitle}{size=\large, series=\mdseries} % Frame subtitle size.
+\setbeamerfont{page number in head/foot}{size=\scriptsize} % Size of footline text.
+\setbeamerfont{colourdivider}{size=\large} % Size of text on section divider slides.
+
+\setbeamerfont{itemize item}{size=\normalsize} % Itemize item text size
+\setbeamerfont{itemize subitem}{size=\small} % Itemize subitem text size
+\setbeamerfont{itemize subsubitem}{size=\footnotesize} % Itemize subsubitem text size
+
+\setbeamerfont{enumerate item}{size=\normalsize} % Enumerate item text size
+\setbeamerfont{enumerate subitem}{size=\small} % Enumerate subitem text size
+\setbeamerfont{enumerate subsubitem}{size=\footnotesize} % Enumerate subsubitem text size
+
+\setbeamerfont{description item}{size=\normalsize, series=\bfseries} % Description item size and bold
+
+\setbeamerfont{block title}{size=\normalsize, series=\bfseries} % block title size and bold
+% ======================================================================>>>
+
+\mode<all>

@@ -1,0 +1,157 @@
+%% beamerouterthemeUAntwerp.sty
+%% Copyright 2019 Joren Vanherck
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+% 
+% The Current Maintainer of this work is Joren Vanherck.
+%
+% This work consists of the files 
+% 	beamerthemeUAntwerp.sty, 
+% 	beamercolorthemeUAntwerp.sty, 
+% 	beamerfontthemeUAntwerp.sty, 
+% 	beamerinnerthemeUAntwerp.sty, 
+% 	beamerouterthemeUAntwerp.sty,
+% 	colorsUAntwerp.sty,
+% and the example file UAntwerp_beamer_example.tex.
+%
+% <<<======================================================================
+% Outer theme for the beamer UAntwerp template
+% ======================================================================>>>
+\mode<presentation>
+
+\setbeamertemplate{navigation symbols}{} % Remove navigation buttons
+
+% <<<======================================================================
+% Set the left and right margins of the text and titles on the slides.
+% Left margin ppt template: 1.5cm horizontal box position
+% Right margin ppt template: 25.4cm ppt width - 1.5cm horizontal box position - 22.4cm box width = 8.8mm
+\def \leftslidemargin {1.5} %
+\def \rightslidemargin {1.5} %
+\setbeamersize{text margin left = \leftslidemargin\abspptcm}
+\setbeamersize{text margin right = \rightslidemargin\abspptcm}
+\defnewlength{\beamerleftmargin}{\Gm@lmargin}
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Defines appearance of frame title and subtitle.
+% Colors are defined in beamercolorthemeUAntwerp.sty.
+% Font settings are defined in beamerfontthemeUAntwerp.sty.
+% \strut places a vertical height with 0 width to avoid 'wobbling' of the title
+\setbeamertemplate{frametitle}
+{
+	\ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+	\@tempdima=\textwidth%
+	\advance\@tempdima by\beamer@leftmargin%
+	\advance\@tempdima by\beamer@rightmargin%
+	\begin{beamercolorbox}[sep=0.3cm,left,wd=\the\@tempdima]{frametitle}%
+		\usebeamerfont{frametitle}
+		\vbox{}\vskip-0.10\abspptcm%-2.15\abspptcm = bottom of title aligned with top of slide. Distance between bottom of title and top of slide in template:2.05cm
+		\if@tempswa\else\csname beamer@fteleft\endcsname\fi%
+		\hspace{\dimexpr\beamer@leftmargin-0.3cm-0.175cm\relax} \strut\insertframetitle\strut\par			
+		{%
+			\ifx\insertframesubtitle\@empty%
+			\else%
+			{\vskip-0.3ex\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}%
+			\hspace{\dimexpr\beamer@leftmargin-0.15cm-0.175cm\relax}%
+			\strut\insertframesubtitle\strut\par}%
+			\fi
+		}%
+		\vskip-1ex%
+		\if@tempswa\else\vskip-.3cm\fi% set inside beamercolorbox... evil here...
+	\end{beamercolorbox}
+}
+% ======================================================================>>>
+
+
+% <<<======================================================================
+% Define the footline for several different types of slides
+
+% <<<----------------------------------------------------------------------
+% Define the footline for normal slides
+% TODO: add option for date
+\defbeamertemplate*{footline}{normal slide}{%
+	\begin{tikzpicture}[remember picture,overlay, x=1.0\pptwcm, y=1.0\ppthcm]
+		% A path that follows the edges of the current page
+		\tikzstyle{reverseclip}=[insert path={(current page.north east) --
+			(current page.south east) --
+			(current page.south west) --
+			(current page.north west) --
+			(current page.north east)}
+		]
+		
+		% Bottom Wave normal frame footer
+		%% Points on red arc and center of circle for this arc
+		\coordinate (lp) at ($(current page.south west) + (0,0.79\pptwcm)$);
+		\coordinate (rp) at ($(current page.south east) + (0,2.33\pptwcm)$);
+		\coordinate (mid) at ($ (lp)!0.5!(rp) $);
+		\coordinate (cent) at ($ (mid)!5.7!90:(rp) $);
+		
+		%% Draw the frame footer arc
+		\begin{scope}
+			\begin{pgfinterruptboundingbox} % To make sure our clipping path does not mess up the placement of the picture
+			\path[reverseclip, fill=uablue] %\clip[fill=uablue] 
+				let 
+					\p1 = ($ (cent) - (lp) $), 
+					\n1 = {veclen(\x1,\y1)} 
+				in
+					(cent) circle (\n1);
+			\end{pgfinterruptboundingbox}
+		\end{scope}
+		
+		% Logo UA
+		\node[
+			anchor=south east, 
+			inner sep=0,
+			outer sep=0,
+			] 
+		(UA_logo_text) 
+		at ($(current page.south east) + (-1.016\pptwcm,0.387\pptwcm)$)
+		{
+			\includegraphics[max height=0.937\pptwcm]{logo/logo_UA_U_wit.pdf}			 
+		};
+				
+		% Page number
+		\node[
+			anchor=south east,
+			inner sep = 0,
+			shift={(1.03\pptwcm,0.20\pptwcm)},
+		]
+		(page_number)
+		at (current page.south west)
+		{
+			\usebeamercolor[fg]{page number in head/foot}
+			\usebeamerfont{page number in head/foot} 
+			\insertframenumber 
+		};		
+	\end{tikzpicture}
+} % End footline normal slide
+
+\setbeamertemplate{footline}[normal slide] %set this footline for the entire document, unless specified otherwise
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Define the footer for titleslide
+\defbeamertemplate{footline}{titleslide}{%
+	%titleslide has an empty footer (correct footer is embedded in titleslide)
+}
+% ---------------------------------------------------------------------->>>
+
+% <<<----------------------------------------------------------------------
+% Define the footer for titleslide
+\defbeamertemplate{footline}{emptyfooter}{%
+	%titleslide has an empty footer (correct footer is embedded in titleslide)
+}
+% ---------------------------------------------------------------------->>>
+
+% ======================================================================>>>
+
+\mode<all>
